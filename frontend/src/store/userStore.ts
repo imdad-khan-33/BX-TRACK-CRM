@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { User, PaginatedResponse } from '@typings/api';
+import { User } from '@typings/api';
 import { apiRequest } from '@services/api';
 
 interface UserStoreState {
