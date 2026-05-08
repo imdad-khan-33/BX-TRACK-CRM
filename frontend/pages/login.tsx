@@ -6,7 +6,7 @@ import { LoadingSpinner } from '@components/common/LoadingSpinner';
 export default function LoginPage() {
   const router = useRouter();
   const { user, login, isLoading, error } = useAuth();
-  const [email, setEmail] = useState('john@acme.com');
+  const [email, setEmail] = useState('imdadkhanr9@gmail.com');
   const [password, setPassword] = useState('password123');
   const [localError, setLocalError] = useState<string | null>(null);
 
@@ -89,11 +89,22 @@ export default function LoginPage() {
         <div className="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
           <p className="text-sm font-medium text-gray-900 mb-2">Demo Credentials:</p>
           <div className="text-xs text-gray-600 space-y-1">
+            <p className="font-semibold text-gray-700">🏢 Microsoft (Org 1)</p>
             <p>
-              <strong>Admin:</strong> john@acme.com / password123
+              <strong>Admin:</strong> imdadkhanr9@gmail.com / password123
             </p>
             <p>
               <strong>Member:</strong> alice@acme.com / password123
+            </p>
+            <p>
+              <strong>Member:</strong> bob@acme.com / password123
+            </p>
+            <p className="font-semibold text-gray-700 mt-2">🏢 Tech Startup Inc (Org 2)</p>
+            <p>
+              <strong>Admin:</strong> sarah@techstartup.com / password123
+            </p>
+            <p>
+              <strong>Member:</strong> charlie@techstartup.com / password123
             </p>
           </div>
         </div>
