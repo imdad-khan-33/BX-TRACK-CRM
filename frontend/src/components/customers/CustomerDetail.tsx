@@ -56,9 +56,8 @@ export function CustomerDetail({ customerId }: CustomerDetailProps) {
     if (!confirm('Are you sure you want to delete this note?')) return;
 
     try {
-      // Call API to delete note
+      await apiRequest('DELETE', `/customers/${customerId}/notes/${noteId}`);
       setSuccess('Note deleted successfully');
-      // Refetch customer
       await fetchCustomer(customerId);
     } catch (error: any) {
       setError(error.message || 'Failed to delete note');
