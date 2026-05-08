@@ -1,0 +1,112 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================================
+// MODELS
+// ============================================================================
+
+model Organization {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name      String   @db.VarChar(255)
+  createdAt DateTime @default(now()) @db.Timestamp(6)
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(6)
+
+  users        User[]
+  customers    Customer[]
+  notes        Note[]
+  activityLogs ActivityLog[]
+
+  @@map("organizations")
+}
+
+model User {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  organizationId String   @db.Uuid
+  name           String   @db.VarChar(255)
+  email          String   @db.VarChar(255)
+  passwordHash   String   @db.VarChar(255)
+  role           String   @db.VarChar(50) // 'admin' or 'member'
+  createdAt      DateTime @default(now()) @db.Timestamp(6)
+  updatedAt      DateTime @default(now()) @updatedAt @db.Timestamp(6)
+  deletedAt      DateTime? @db.Timestamp(6) // Soft delete
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  customers    Customer[]   @relation("AssignedTo")
+  notes        Note[]
+  activityLogs ActivityLog[]
+
+  @@unique([organizationId, email])
+  @@index([organizationId])
+  @@index([organizationId, deletedAt])
+  @@map("users")
+}
+
+model Customer {
+  id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  organizationId   String    @db.Uuid
+  name             String    @db.VarChar(255)
+  email            String?   @db.VarChar(255)
+  phone            String?   @db.VarChar(20)
+  assignedToUserId String?   @db.Uuid
+  version          Int       @default(1) // Optimistic locking
+  deletedAt        DateTime? @db.Timestamp(6) // Soft delete
+  createdAt        DateTime  @default(now()) @db.Timestamp(6)
+  updatedAt        DateTime  @default(now()) @updatedAt @db.Timestamp(6)
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  assignedTo       User?      @relation("AssignedTo", fields: [assignedToUserId], references: [id], onDelete: SetNull)
+  notes            Note[]
+
+  @@index([organizationId])
+  @@index([assignedToUserId])
+  @@index([organizationId, deletedAt]) // For soft delete filtering
+  @@map("customers")
+}
+
+model Note {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  customerId     String   @db.Uuid
+  organizationId String   @db.Uuid
+  content        String   @db.Text
+  createdByUserId String  @db.Uuid
+  createdAt      DateTime @default(now()) @db.Timestamp(6)
+  updatedAt      DateTime @default(now()) @updatedAt @db.Timestamp(6)
+
+  customer     Customer     @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdBy    User         @relation(fields: [createdByUserId], references: [id], onDelete: SetNull)
+
+  @@index([customerId])
+  @@index([organizationId])
+  @@index([createdByUserId])
+  @@map("notes")
+}
+
+model ActivityLog {
+  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  organizationId   String   @db.Uuid
+  entityType       String   @db.VarChar(50) // 'customer', 'note', 'user'
+  entityId         String   @db.Uuid
+  action           String   @db.VarChar(50) // 'created', 'updated', 'deleted', 'restored', 'assigned'
+  performedByUserId String? @db.Uuid
+  metadata         Json?    @db.JsonB // Store additional context
+  timestamp        DateTime @default(now()) @db.Timestamp(6)
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  performedBy      User?      @relation(fields: [performedByUserId], references: [id], onDelete: SetNull)
+
+  @@index([organizationId])
+  @@index([entityType, entityId])
+  @@index([timestamp])
+  @@index([organizationId, timestamp])
+  @@map("activity_logs")
+}
