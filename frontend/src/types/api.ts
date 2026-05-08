@@ -74,6 +74,7 @@ export interface Customer {
   phone: string | null;
   assignedToUserId: string | null;
   assignedTo?: User | null;
+  notes?: Note[];
   deletedAt: string | null;
   createdAt: string;
   updatedAt: string;
