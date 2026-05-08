@@ -20,7 +20,7 @@ export function UserForm({ userId }: UserFormProps) {
     name: '',
     email: '',
     password: '',
-    role: 'member' as const,
+    role: 'member' as 'admin' | 'member',
   });
 
   useEffect(() => {
