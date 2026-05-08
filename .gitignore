@@ -74,14 +74,8 @@ build/
 out/
 coverage/
 
-# Docker (optional — ignore if not submitting deployment config)
-Dockerfile
-.dockerignore
-docker-compose.yml
-backend/Dockerfile
-backend/.dockerignore
-frontend/Dockerfile
-frontend/.dockerignore
+# Docker files are included for reviewer convenience
+# Reviewer can run: docker-compose up -d (starts PostgreSQL)
 
 # Lock files (reviewer will run npm install)
 package-lock.json
