@@ -37,10 +37,22 @@ npm run dev                  # Runs on http://localhost:3000
 
 ### Demo Credentials
 
-| Role   | Email                    | Password     |
-|--------|--------------------------|--------------|
-| Admin  | imdadkhanr9@gmail.com    | password123  |
-| Member | alice@microsoft.com      | password123  |
+**🏢 Organization 1 — Microsoft**
+
+| Role   | Name          | Email                     | Password     |
+|--------|---------------|---------------------------|--------------|
+| Admin  | Imdad Admin   | imdadkhanr9@gmail.com     | password123  |
+| Member | Alice Member  | alice@acme.com            | password123  |
+| Member | Bob Member    | bob@acme.com              | password123  |
+
+**🏢 Organization 2 — Tech Startup Inc**
+
+| Role   | Name           | Email                      | Password     |
+|--------|----------------|----------------------------|--------------|
+| Admin  | Sarah Admin    | sarah@techstartup.com      | password123  |
+| Member | Charlie Member | charlie@techstartup.com    | password123  |
+
+> **Note:** Each organization's data is fully isolated. Logging in as Microsoft admin will never show Tech Startup data.
 
 ---
 
