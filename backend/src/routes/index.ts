@@ -12,6 +12,16 @@ const router = Router();
  * API v1 routes
  */
 
+// Public test route
+router.get('/test', (req, res) => {
+  res.json({
+    success: true,
+    message: 'Backend API is working perfectly!',
+    vps_ip: '31.97.77.215',
+    timestamp: new Date().toISOString()
+  });
+});
+
 // Auth routes (no middleware required)
 router.use('/auth', authRoutes);
 
